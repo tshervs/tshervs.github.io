@@ -1,0 +1,125 @@
+---
+title: "lab02"
+author: "Tyler Sherven"
+date: "9/26/2017"
+output: html_document
+---
+
+```{r}
+library(MASS)
+df <- Cars93
+
+#Midsize cars minimum
+min(df[df$Type == 'Midsize', 'Price'])
+
+#Compact cars minimum
+min(df[df$Type == 'Compact', 'Price'])
+
+#Large cars minimum
+min(df[df$Type == 'Large', 'Price'])
+
+#Small cars minimum
+min(df[df$Type == 'Small', 'Price'])
+
+#Sporty cars minimum
+min(df[df$Type == 'Sporty', 'Price'])
+
+#Van maximum MPG Highway
+max(df[df$Type == 'Van', 'MPG.highway'])
+
+#Compact max MPG Highway
+max(df[df$Type == 'Compact', 'MPG.highway'])
+
+#Large max MPG highway
+max(df[df$Type == 'Large', 'MPG.highway'])
+
+#Midsize max MPG highway
+max(df[df$Type == 'Midsize', 'MPG.highway'])
+
+#Small max MPG Highway
+max(df[df$Type == 'Small', 'MPG.highway'])
+
+#Sporty max MPG highway
+max(df[df$Type == 'Sporty', 'MPG.highway'])
+
+price <- df$Price
+
+#Prices of Midsize Manufacturer & Model
+df[df$Type=="Midsize",c("Manufacturer","Model","Price")]
+
+#Prices of Large Manufacturer & Model
+df[df$Type=="Large",c("Manufacturer","Model","Price")]
+
+#Prices of Small Manufacturer & Model
+df[df$Type=="Small",c("Manufacturer","Model","Price")]
+
+#Prices of Sporty Manufacturer & Model
+df[df$Type=="Sporty",c("Manufacturer","Model","Price")]
+
+#Prices of Van Manufacturer & Model
+df[df$Type=="Van",c("Manufacturer","Model","Price")]
+
+#Van Manufacturer and Model MPG highway
+df[df$Type=="Van",c("Manufacturer","Model","MPG.highway")]
+
+#Compact Manufacturer and Model MPG highway
+df[df$Type=="Compact",c("Manufacturer","Model","MPG.highway")]
+
+#Large Manufacturer and Model MPG highway
+df[df$Type=="Large",c("Manufacturer","Model","MPG.highway")]
+
+#Midsize Manufacturer and Model MPG highway
+df[df$Type=="Midsize",c("Manufacturer","Model","MPG.highway")]
+
+#Small Manufacturer and Model MPG highway
+df[df$Type=="Small",c("Manufacturer","Model","MPG.highway")]
+
+#Sporty Manufacturer and Model MPG highway
+df[df$Type=="Sporty",c("Manufacturer","Model","MPG.highway")]
+
+#Cars dataframe
+library(MASS)
+Cars93
+data("Cars93")
+df <- Cars93
+
+#USA_Dataframe
+usa <- df[df$Origin=="USA", c("Make")]
+
+#NonUSA_Dataframe
+nonusa <- df[df$Origin=="non-USA", c("Make")]
+nonusa
+
+midsizemean <- mean(df[df$Type == 'Midsize', 'Horsepower'])
+midsize <- (df[df$Type == 'Midsize', 'Horsepower'])
+midsizedifference <- midsizemean - midsize 
+
+
+compactmean <- mean(df[df$Type == 'Compact', 'Horsepower'])
+compact <- (df[df$Type == 'Compact', 'Horsepower'])
+compactdifference <- compactmean-compact
+
+largemean <- mean(df[df$Type == 'Large', 'Horsepower'])
+Large <- (df[df$Type == 'Large', 'Horsepower'])
+largedifference <- largemean-Large
+
+smallmean <- mean(df[df$Type == 'Small', 'Horsepower'])
+small <- (df[df$Type == 'Small', 'Horsepower'])
+smalldifference <- smallmean - small 
+
+
+sportymean <- mean(df[df$Type == 'Sporty', 'Horsepower'])
+sporty <- (df[df$Type == 'Sporty', 'Horsepower'])
+sportydiffernce <- sportymean - sporty 
+
+
+vanmean <- mean(df[df$Type == 'Van', 'Horsepower'])
+van <- (df[df$Type == 'Van', 'Horsepower'])
+vandiff <- vanmean - van 
+
+#USA Car Makes
+write.csv(usa)
+```
+
+
+
