@@ -1,0 +1,248 @@
+---
+title: "Geog533 Lab 8"
+author: "Tyler Sherven"
+output:
+  html_document:
+    toc: yes
+  html_notebook:
+    toc: yes
+    toc_float: yes
+---
+
+Complete the following exercises in Chapter 8 (Introduction to Regression Analysis) of the textbook [R] pages 247-250. 
+
+## Question 1
+
+This is Exercise 1 in Chapter 8 of the Textbook [R].
+
+A regression of weekly shopping trip frequency on annual income (data entered in thousands of dollars) is performed on data collected from 24 respondents. The results are summarized below:
+
+* Intercept: 0.46
+* Slope: 0.19
+
+|          | Sum of squares  | Degrees of freedom |  Mean square   |       *F*       |
+|----------|-----------------|--------------------|----------------|-----------------|
+|Regression|                 |                    |                |                 |
+| Residual |       1.7       |                    |                |                 |
+| Total    |       2.3       |                    |                |                 |
+
+
+### Question 1(a)
+Fill in the blanks in the ANOVA table.
+
+```{r}
+resp <- 24
+
+regsumsquare <- 2.3 - 1.7
+
+totaldf <- resp-1
+resdf <- resp-2
+
+resmeansquare <- 1.7/resdf
+resmeansquare1 <- round(resmeansquare, 3)
+
+f <- round(regsumsquare/resmeansquare1)
+```
+
+
+|          | Sum of squares  | Degrees of freedom |  Mean square   |       *F*       |
+|----------|-----------------|--------------------|----------------|-----------------|
+|Regression| r regsumsquare  |          1         |r regssumsquare |  r F            |
+| Residual |       1.7       |    r resdf         |r resmeansquare1|                 |
+| Total    |       2.3       |    r totaldf       |                |                 |
+
+
+### Question 1(b)
+What is the predicted number of weekly shopping trips for someone making $50,000/year?
+```{r}
+.46 + (.10 * 50)
+```
+
+
+### Question 1(c)
+In words, what is the meaning of the coefficient 0.19?
+
+###Solution 1(c)
+With each dollar an individual earns, they will embark on about .19 shopping trips each week
+
+
+### Question 1(d)
+Is the regression coefficient significantly different from zero? How do you know?
+```{r}
+cr <- qf(0.95, 1, 22)
+if(f < cr){
+print("We accept the null hypothesis")
+} else {
+print("We reject the null hypothesis")}
+
+### the regression coeffiecient is significantly different different than 0, since the F value is larger than the critical F value
+```
+
+
+
+### Question 1(e)
+What is the value of the correlation coefficient?
+```{r}
+r <- sqrt(regsumsquare/2.3)
+r
+```
+
+
+
+
+## Question 2
+
+This is Exercise 6 in Chapter 8 of the Textbook [R].
+
+The following data are collected in an effort to determine whether snowfall is dependent upon elevation: 
+
+| Snowfall (inches) | Elevation (feet) |
+|-------------------|------------------|
+|       36          |       400        |
+|       78          |       800        |
+|       11          |       200        |
+|       45          |       675        |
+
+Using R, show your work on exercises (a) through (g).
+
+### Question 2(a)
+Find the regression coefficients (the intercept and the slope coefficient).
+```{r}
+s <- c(36, 78, 11, 45)
+e <- c(400, 800, 200, 675)
+
+m <- lm(s~e)
+summary(m)
+
+###slope = .09665
+###intercept = -7.63721
+```
+
+
+### Question 2(b)
+Estimate the standard error of the residuals about the regression line.
+```{r}
+summary(m)
+
+###Residual Standard Error = 11.25
+```
+
+
+### Question 2(c)
+Test the hypothesis that the regression coefficient associated with the independent variables is equal to zero. Also place a 95% confidence interval on the regression coefficient.
+```{r}
+crf <- qf(.95, 1, 2)
+crf
+
+###The critical F at 18.51282 is larger than the regression coefficient of 16.173. Therefore we can't reject the null hypothesis
+```
+
+
+### Question 2(d)
+Find the value of $r^2$.
+```{r}
+d <- cor.test(e, s, method = "pearson")
+d2 <- d$estimate^2
+d2
+```
+
+
+### Question 2(e)
+Make a table of the observed values, predicted values, and the residuals.
+```{r}
+edf <- data.frame(s, e)
+
+edf$predicted <- m$fitted.values
+edf$residuals <- m$residuals
+edf
+
+library(knitr)
+kable(edf)
+
+```
+
+
+### Question 2(f)
+Prepare an analysis of variance table portraying the regression results.
+```{r}
+anova(m)
+2047 + 253.23
+```
+
+
+|          | Sum of squares  | Degrees of freedom |  Mean square   |       *F*       |
+|----------|-----------------|--------------------|----------------|-----------------|
+|Regression|    2047.77      |       1            |   2047.77      |    16.173      |
+| Residual |   253.23        |       2            |      126.61    |                 |
+| Total    |    2300.23      |       3            |                |                 |
+
+### Question 2(g)
+Graph the data and the regression line.
+```{r}
+plot(e,s)
+abline(m,col = "green")
+segments(e, fitted(m), e, s, col="red", lty = "dashed")
+```
+
+
+
+
+## Question 3
+
+This is Exercise 10 in Chapter 8 of the Textbook [R].
+
+Use R and the [Milwaukee dataset](http://spatial.binghamton.edu/geog533/data/Milwaukee_Sales.csv) to:
+
+### Problem
+perform a regression using sales price as the dependent variable and lot size as the independent variable.
+
+### Solution
+```{r}
+url = "http://spatial.binghamton.edu/geog533/data/Milwaukee_Sales.csv"
+
+a <- read.csv(url)
+ms <- lm(a$SalePrice~a$LotSize)
+
+summary(ms)
+```
+
+
+
+## Question 4
+
+This is Exercise 11 in Chapter 8 of the Textbook [R].
+
+Use R and the Hypothetical [UK Housing Prices dataset](http://spatial.binghamton.edu/geog533/data/UK_Housing.csv) to:
+
+### Question 4(a) 
+perform a regression using house price as the dependent variable, and number of bedrooms as the independent variable;
+
+```{r}
+url = "http://spatial.binghamton.edu/geog533/data/UK_Housing.csv"
+
+uka <- read.csv(url,header = TRUE)
+ukb <- lm(uka$price~uka$bedrooms)
+
+summary(ukb)
+```
+
+
+### Question 4(b) 
+(b) repeat part (a), using the number of bathrooms as the independent variable, and comment on the results.
+```{r}
+b4 <- lm(uka$price~uka$bathrooms)
+summary(b4)
+```
+The number of bathrooms has less of an impact on price than the number of bedrooms. These results lead us to reject the null hypothesis.
+
+## Question 5
+Download the [hometown.csv](http://spatial.binghamton.edu/geog533/data/hometown.csv), append your name and hometown coordinates to the csv, then use [leaflet](https://rstudio.github.io/leaflet/) to create a web map (10 pt.)
+
+```{r}
+library(leaflet)
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=-78.87, lat=42.9659, popup="home")
+m  # Print the map
+```
+
