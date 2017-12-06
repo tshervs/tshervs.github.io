@@ -1,0 +1,90 @@
+---
+title: "Which Economic and Ethnic/Race Factors are Most Impactful on Median Property Values Broome County Census Tracts?"
+author: "Tyler Sherven"
+output: 
+  html_notebook:
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+## 1 CSV & Packages
+Csv file containing 2011-15 Broome County Census Tract ACS data for economic factors: Labor Force Participation Rate 16+ and Median Household Income, and race/ethnic census tract distribution of white, black, asian, native american, and latino populations. Install necessary packages.
+```{r}
+library(readr)
+data1 <- read_csv("~/Documents/533FinalProjectData.csv")
+data1
+
+library(knitr)
+library(car)
+library(MASS)
+```
+
+
+## 2 Setting up variables for cleaner coding
+```{r}
+medpropvalue <- data1$MedPropValue
+labor <- data1$`LaborForceParticipationRate16+`
+medhouseinc <- data1$HouseholdMedInc
+black <- data1$Black
+white <- data1$White
+asian <- data1$Asian
+native <- data1$Native
+latino <- data1$`Hispanic/Latino`
+```
+
+
+## 3 Linear Model Function and Summary including all variables
+```{r}
+a <- lm(medpropvalue~medhouseinc+labor+black+native+latino+white+asian)
+summary(a)
+##Economic factors of Labor Force Participation Rate 16+ and Household Median Income are most significant with 3 stars, while Asian Population is also significant with 3 stars.
+```
+
+
+## 4 Improved linear model function and summary of all variables
+```{r}
+b <- lm(medpropvalue~labor+medhouseinc+asian)
+summary(b)
+##Improved linear model results in Asian population ranking as the most significant variable with 3 stars, median household income ranking 2nd with 3 stars, and labor ranking last with no stars.
+```
+
+
+## 5 Linear Model and Summary including Race/Ethnic Variables
+```{r}
+c <- lm(medpropvalue~white+black+native+asian+latino)
+summary(c)
+##Asian, White, and Black populations rate as significant variables.
+```
+
+
+## 6 Improved Linear model and summary of Race/Ethnic Variables
+```{r}
+d <- lm(medpropvalue~white+black+asian)
+summary(d)
+##Asian Population is most significant in determining Broome Census Tract Property Values, followed by Black and then White Populations in signifiance with 2 stars.
+```
+
+## 7 Testing Null Hypothesis of each variable
+Null Hypothesis: there is a relationship between Median Property Value and Variable. Alternative Hypothesis: there is no relationship between Median Property Value and Variable. P.Value less than .05, we accept null hypothesis.
+```{r}
+cor.test(black, medpropvalue, method = "pearson") #Null Hypothesis
+cor.test(white, medpropvalue, method = "pearson") #Alternative Hypothesis
+cor.test(asian, medpropvalue, method = "pearson") #Null Hypothesis
+cor.test(labor, medpropvalue, method = "pearson") #Alternative Hypothesis
+cor.test(medhouseinc, medpropvalue, method = "pearson") #Alternative Hypothesis
+```
+
+
+## 8 Data Visualization
+Scatterplots to visualize the relationship between median property value and each significant variable from the original and race/ethnic linear models
+```{r}
+plot(medpropvalue, medhouseinc)
+plot(medpropvalue, black)
+plot(medpropvalue, white)
+plot(medpropvalue, asian)
+plot(medpropvalue, labor)
+```
+
+## 9 Conclusion
+Variables that both demonstrate linear model significance and fulfill null hypothesis, ranking as most impactful on Broome County Median Property Value: 1. Asian  Population, 2. Black Population.
